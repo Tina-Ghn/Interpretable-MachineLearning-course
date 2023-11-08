@@ -2,10 +2,11 @@ import sys
 sys.path.insert(0, "")
 from utils.dataset import Dataset
 from tasks.plotting import plot_bar
-from sklearn import linear_model
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import SGDClassifier
 import numpy as np
 import pandas as pd
-
 
 def fit_linear_regression(X_train, y_train):
     """
@@ -19,11 +20,9 @@ def fit_linear_regression(X_train, y_train):
     Returns:
         model (LinearRegression): Fitted linear regression model.
     """
-    
-    model = None
-    
+    model = LinearRegression()
+    model.fit(X_train, y_train)
     return model
-
 
 def fit_my_linear_regression(X_train, y_train):
     """
@@ -37,7 +36,6 @@ def fit_my_linear_regression(X_train, y_train):
     Returns:
         model (MyLinearRegression): Fitted linear regression model.
     """
-    
     class MyLinearRegression:
         def __init__(self):
             self.coef_ = None
@@ -50,7 +48,7 @@ def fit_my_linear_regression(X_train, y_train):
             Returns:
                 y (np.ndarray): Predictions of X.
             """
-            return None
+            return np.dot(X, self.coef_) + self.bias_
         
         def fit(self, X, y, learning_rate=1e-1, epochs=1000):
             """
@@ -63,15 +61,20 @@ def fit_my_linear_regression(X_train, y_train):
                 learning_rate (float): Learning rate decides how much the gradients are updated.
                 epochs (int): Iterations of gradient changes.
             """
-            
-            pass
+            num_samples, num_features = X.shape
+            self.coef_ = np.zeros(num_features)
+            self.bias_ = 0
+
+            for _ in range(epochs):
+                y_pred = np.dot(X, self.coef_) + self.bias_
+                dw = (1/num_samples) * np.dot(X.T, (y_pred - y))
+                db = (1/num_samples) * np.sum(y_pred - y)
+                self.coef_ -= learning_rate * dw
+                self.bias_ -= learning_rate * db
 
     model = MyLinearRegression()
     model.fit(X_train, y_train)
-    
     return model
-    
-
 
 def plot_linear_regression_weights(model, dataset: Dataset, title=None):
     """
@@ -82,17 +85,16 @@ def plot_linear_regression_weights(model, dataset: Dataset, title=None):
     Inputs:
         model (LinearRegression or MyLinearRegression): Linear regression model.
         dataset (utils.Dataset): Used dataset to train the model. Used to receive the labels.
+        title (str): Title for the plot.
         
     Returns:
         x (list): Labels, which are displayed on the x-axis.
         y (list): Values, which are displayed on the y-axis.
-    
     """
-    x = None
-    y = None
-    
+    x = dataset.get_input_labels()  # Get input labels from the dataset
+    y = model.coef_  # Get the coefficients from the model
+    plot_bar(x, y, title, ylabel="Weight")
     return x, y
-
 
 def fit_generalized_linear_model(X_train, y_train):
     """
@@ -106,30 +108,36 @@ def fit_generalized_linear_model(X_train, y_train):
     Returns:
         model: Fitted GLM.
     """
-    model = None
+  
+    from sklearn.multiclass import OneVsRestClassifier
+    from sklearn.linear_model import LogisticRegression
     
+    model = OneVsRestClassifier(LogisticRegression())
+    model.fit(X_train, y_train)
     return model
 
 
 def correlation_analysis(X):
     """
     2.5
-    Performs a correlation analysis using X.
-    Two features are correlated if the correlation value is higher than 0.9.
+    Performs a correlation analysis to check the correlations of a single feature.
     
     Inputs:
-        X (np.ndarray): Data to perform correlation analysis on.
-    
+        X (np.ndarray): Input features.
+        y (np.ndarray): Target values.
+        
     Returns:
-        correlations (dict):
-            Holds the correlated feature ids of a feature id.
-            Key: feature id (e.g. X has 8 columns/features so the dict
-                 should have 8 keys with 0..7)
-            Values: list of correlated feature ids. Exclude the id from the key.
+        correlations (pd.Series): Correlations between input features and target values.
     """
-    
-    correlations = {} 
+    df = pd.DataFrame(X)
+    correlations = {}
+
+    for i in range(X.shape[1]):
+        correlations[i] = [j for j in range(X.shape[1]) if i != j and abs(df[i].corr(df[j])) > 0.9]
+
     return correlations
+
+
 
 
 if __name__ == "__main__":
