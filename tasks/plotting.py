@@ -4,7 +4,7 @@ sys.path.insert(0, "")
 from utils.styled_plot import plt
 
 
-def plot_bar(x, y, name, title=None, ylabel=None):
+def plot_bar(x, y, title=None, ylabel=None):
     """
     Displays a bar plot on given x and y.
     
@@ -17,17 +17,19 @@ def plot_bar(x, y, name, title=None, ylabel=None):
     Returns:
         plt (matplotlib.pyplot or utils.styled_plot.plt)
     """
-    
+    my_cmap = plt.get_cmap("viridis")
     plt.figure()
 
     # do something
     # ...
-
+    plt.bar(x, y, width=0.4)
+    plt.ylabel(ylabel)
+    plt.title(title)
     plt.savefig(f"{title}.png")
 
     # show the figure (needs to be done after saving)
     # ...
-
+    plt.show()
     return plt
 
 
