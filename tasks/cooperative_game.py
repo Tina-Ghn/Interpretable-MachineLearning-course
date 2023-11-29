@@ -74,7 +74,7 @@ def get_shapley_by_order(P, j, v, M=None):
 
     # If M is specified, truncate the list of permutations
     if M is not None:
-        permutations = random.sample(permutations, min(M, len(permutations)))
+        permutations = permutations[:min(M, len(permutations))]
 
     # Iterate over all permutations
     for i, perm in enumerate(permutations):
