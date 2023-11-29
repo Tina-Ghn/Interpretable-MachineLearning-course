@@ -23,16 +23,15 @@ def merge(a, b, j):
         plus_j (np.ndarray): Element from a at the position j. Same shape as a or b.
         minus_j (np.ndarray): Element from b at the position j. Same shape as a or b.
     """
-
-    plus_j = np.concatenate([a[:j], b[j+1:]])
-    minus_j = np.concatenate([a[:j], [b[j]], b[j+1:]])
+    plus_j = np.concatenate((a[:j],a[j], b[j+1:]), axis=None)
+    minus_j = np.concatenate((a[:j], [b[j]], b[j+1:]), axis=None)
 
     return plus_j, minus_j
 
 
 def get_shapley_by_estimation(model, X, x, j, M=None, seed=0):
     """
-    Calculates the shapley value by approximation.
+    Calculates the Shapley value by approximation.
 
     Parameters:
         model: A fit ML model.
@@ -48,8 +47,38 @@ def get_shapley_by_estimation(model, X, x, j, M=None, seed=0):
 
     np.random.seed(seed)
 
-    #TODO implement
-    return 0
+    # If M is not provided, use the number of entries in X
+    M = M or len(X)
+
+    # Initialize Shapley value
+    value = 0.0
+
+    for _ in range(M):
+        # Sample a random instance z from X
+        z = X[np.random.choice(len(X))]
+
+        # Randomly permute features for both x and z
+        perm_x = np.random.permutation(len(x))
+        perm_z = np.random.permutation(len(z))
+
+        # Merge the permuted instances
+        plus_x, minus_x = merge(x, z, j)
+        plus_z, minus_z = merge(z, x, j)
+
+        # Predict using the permuted instances
+        plus_x_pred = model.predict(np.expand_dims(plus_x, axis=0))
+        minus_x_pred = model.predict(np.expand_dims(minus_x, axis=0))
+        plus_z_pred = model.predict(np.expand_dims(plus_z, axis=0))
+        minus_z_pred = model.predict(np.expand_dims(minus_z, axis=0))
+
+        # Update Shapley value based on the estimated contribution
+        value += (plus_x_pred - minus_x_pred + minus_z_pred - plus_z_pred)
+
+    # Normalize the Shapley value by dividing by the number of samples
+    value /= M
+
+    return value
+
 
 
 if __name__ == "__main__":
