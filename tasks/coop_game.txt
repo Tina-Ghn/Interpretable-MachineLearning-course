@@ -1,0 +1,18 @@
+Given are the following sets:
+{(): 0, 1: 50, 2: 27, 3: 61, (1, 2): 75, (1, 3): 30, (2, 3): 67, (1, 2, 3): 100}
+
+Shapley by original implementation:
+--- P1: 30.5
+All possible coalitions without P1: [set(), {2}, {3}, {2, 3}]
+--- P2: 37.5
+All possible coalitions without P2: [set(), {1}, {3}, {1, 3}]
+--- P3: 32.0
+All possible coalitions without P3: [set(), {1}, {2}, {1, 2}]
+
+Shapley by orders:
+--- P1: 30.5
+All possible coalitions without P1: [set(), set(), {2}, {2, 3}, {3}, {2, 3}]
+--- P2: 37.5
+All possible coalitions without P2: [{1}, {1, 3}, set(), set(), {1, 3}, {3}]
+--- P3: 32.0
+All possible coalitions without P3: [{1, 2}, {1}, {1, 2}, {2}, set(), set()]
