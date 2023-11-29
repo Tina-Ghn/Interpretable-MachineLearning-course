@@ -24,8 +24,8 @@ def merge(a, b, j):
         minus_j (np.ndarray): Element from b at the position j. Same shape as a or b.
     """
 
-    plus_j = #TODO
-    minus_j = #TODO
+    plus_j = np.concatenate([a[:j], b[j+1:]])
+    minus_j = np.concatenate([a[:j], [b[j]], b[j+1:]])
 
     return plus_j, minus_j
 
