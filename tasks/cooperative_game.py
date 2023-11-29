@@ -14,7 +14,7 @@ from math import factorial
 
 def get_shapley(P, j, v):
     """
-    Returns the shapley value based on the original implementation.
+    Returns the Shapley value based on the simplified formula.
 
     Parameters:
         P (list): All players.
@@ -24,17 +24,31 @@ def get_shapley(P, j, v):
 
     Returns:
         value (float): Rounded Shapley value to two decimal places.
-        S_all (list of sets): All possible combinations.
+        S_all (list of sets): One set for each permutation order. Set should only contain the players
+            before j is added.
     """
 
-    S_all = #TODO
-    value = #TODO
+    S_all = [set(s) for s in itertools.chain.from_iterable(itertools.combinations(P, r) for r in range(len(P) + 1))]
+    value = 0.0
+
+    for S in S_all:
+        if j in S:
+            continue
+        cardinality = len(S)
+        # Using the simplified formula for Shapley value
+        value += (factorial(cardinality) * factorial(len(P) - cardinality - 1) / factorial(len(P)) *
+                  (v(S.union({j})) - v(S)))
+
+    # Convert the result to match the format of get_shapley_by_order
+    S_all = [S for S in S_all if j not in S]
+    value = round(value, 2)
+
     return value, S_all
 
 
 def get_shapley_by_order(P, j, v, M=None):
     """
-    Returns the shapley value based on order permutations.
+    Returns the Shapley value based on order permutations.
 
     Parameters:
         P (list): All players.
@@ -49,11 +63,36 @@ def get_shapley_by_order(P, j, v, M=None):
             before j is added.
     """
 
-    S_all = #TODO
-    value = #TODO
+    # Initialize a list to store sets for each permutation order
+    S_all = [set() for _ in range(math.factorial(len(P)))]
 
+    # Initialize the Shapley value
+    value = 0.0
+
+    # Generate all possible permutations of players
+    permutations = list(itertools.permutations(P))
+
+    # If M is specified, truncate the list of permutations
+    if M is not None:
+        permutations = random.sample(permutations, min(M, len(permutations)))
+
+    # Iterate over all permutations
+    for i, perm in enumerate(permutations):
+        # Find the index of the selected player in the permutation
+        index_j = perm.index(j)
+
+        # Create a set containing players before j is added
+        S_all[i] = set(perm[:index_j])
+
+        # Update the Shapley value based on the difference in values
+        value += (v(S_all[i].union({j})) - v(S_all[i]))
+
+    # Normalize the Shapley value by dividing by the factorial of the number of players
+    value /= math.factorial(len(P))
+    value = round(value, 2)
+
+    # Round the result to two decimal places
     return value, S_all
-
 
 if __name__ == "__main__":
 
