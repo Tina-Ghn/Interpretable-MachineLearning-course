@@ -99,13 +99,13 @@ def weight_points(selected_x, Z, sigma=0.2):
     # Calculate Euclidean distances
     distances = np.linalg.norm(Z - selected_x, axis=1)
 
-    # Calculate weights using the given formula
+    # Compute weights using the given formula
     weights = np.exp(-distances**2 / (2 * sigma**2))
 
-    # Normalize weights to be between 0 and 1
-    weights = weights / np.sum(weights)
+    # Normalize weights between 0 and 1
+    normalized_weights = (weights - np.min(weights)) / (np.max(weights) - np.min(weights))
 
-    return weights
+    return normalized_weights
 
 
 def plot_points_in_mesh(plt, X=[], y=[], weights=None, colors={}, selected_x=None, size=8):
