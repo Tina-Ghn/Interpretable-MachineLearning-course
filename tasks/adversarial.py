@@ -144,9 +144,6 @@ def plot_adversarials(model, image, adv_images, eps_values):
         axes[i + 1].imshow(unnormalized_adv_image)
         axes[i + 1].set_title(f'Eps: {eps_values[i]}\nAdv Label: {adv_label.item()}')
 
-    for ax in axes:
-        ax.axis('off')
-
     plt.show()
 
 

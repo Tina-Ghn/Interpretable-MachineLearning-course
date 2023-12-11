@@ -23,7 +23,8 @@ def compute_distance(x, counterfactual):
     Returns:
         distance (torch.tensor): The L1 distance between the original input x and the counterfactual input.
     """
-    return None
+    distance = torch.sum(torch.abs(x - counterfactual))
+    return distance
 
 
 def compute_output_difference(output, desired_output):
@@ -37,7 +38,9 @@ def compute_output_difference(output, desired_output):
     Returns:
         difference (torch.tensor): The summed square error between output and desired_output.
     """
-    return None
+    squared_diff = (output - desired_output) ** 2
+    difference = torch.sum(squared_diff)
+    return difference
 
 
 def compute_loss(x, counterfactual, output, desired_output, lambda_reg):
@@ -58,7 +61,15 @@ def compute_loss(x, counterfactual, output, desired_output, lambda_reg):
     Returns:
         difference (torch.tensor): The summed square error between output and desired_output.
     """
-    return None
+    distance = compute_distance(x,counterfactual)
+
+    # Compute the difference between the model output and the desired output
+    output_difference = compute_output_difference(output,desired_output)
+
+    # Combine the two components via a weighted sum
+    loss = distance + lambda_reg * output_difference
+    return loss
+
 
 
 def create_counterfactual(model, x, desired_y, lambda_reg=1.0, num_steps=1000):
@@ -87,8 +98,35 @@ def create_counterfactual(model, x, desired_y, lambda_reg=1.0, num_steps=1000):
         - you have to convert the desired_y to a one hot representation to be able to compare it with the model output
         of shape (1, 3).
     """
-    
-    return None
+
+    # Clone the original instance to start optimization
+    counterfactual = x.clone().detach().requires_grad_(True)
+
+    # Convert desired_y to one-hot representation
+    one_hot_desired_y = torch.nn.functional.one_hot(torch.tensor([desired_y]), num_classes=model.num_classes).float()
+
+    # Use Adam optimizer for optimization
+    optimizer = torch.optim.Adam([counterfactual], lr=0.01)
+
+    # Optimization loop
+    for step in range(num_steps):
+        # Forward pass to obtain model output
+        model_output = model(counterfactual)
+
+        # Compute the loss
+        loss = compute_loss(x, counterfactual, model_output, one_hot_desired_y, lambda_reg)
+
+        # Backward pass and optimization step
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        # Check if the predicted class is the desired one
+        predicted_class = torch.argmax(model_output, dim=1).item()
+        if predicted_class == desired_y:
+            break
+
+    return counterfactual, step
 
 
 if __name__ == "__main__":
