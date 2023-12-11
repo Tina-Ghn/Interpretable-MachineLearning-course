@@ -16,7 +16,6 @@ from classifiers.cnn_classifier import ImageNetClassifier
 
 torch.manual_seed(0)
 
-
 def get_gradient(model, image):
     """
     Propagates the cross entropy loss between the model's output (logits) and the label (here the label
@@ -33,9 +32,32 @@ def get_gradient(model, image):
     Returns:
         gradient (torch.tensor): The input gradient. Same shape as the input image.
     """
+    # Ensure the model is in evaluation mode
+    model.eval()
 
-    return None
+    # Set requires_grad for the input image to True
+    image.requires_grad_(True)
 
+    # Forward pass to obtain logits
+    logits = model(image)
+
+    # Get the predicted label
+    predicted_label = torch.argmax(logits, dim=1)
+
+    # Create a one-hot tensor for the predicted label
+    one_hot = torch.zeros_like(logits)
+    one_hot[0, predicted_label] = 1.0
+
+    # Compute the cross-entropy loss
+    loss = torch.nn.functional.cross_entropy(logits, predicted_label)
+
+    # Backward pass to compute the gradient
+    loss.backward()
+
+    # Extract the gradient from the input image
+    gradient = image.grad.data
+
+    return gradient
 
 def perturb_image(image, grad, eps):
     """
@@ -51,9 +73,15 @@ def perturb_image(image, grad, eps):
     Returns:
         image (torch.tensor): The perturbed image.
     """
+    perturbation = eps * torch.sign(grad)
+    perturbed_image = image + perturbation
 
-    return None
 
+    return perturbed_image
+
+
+import matplotlib.pyplot as plt
+import torchvision.transforms as transforms
 
 def create_adversarials(model, image, eps_values):
     """
@@ -71,9 +99,14 @@ def create_adversarials(model, image, eps_values):
     Returns:
         adversarials (List[torch.tensor]): A list containing one adversarial example for each eps value in eps_values.
     """
+    adversarials = []
 
-    return None
-
+    for eps in eps_values:
+        gradient=get_gradient(model,image)
+        perturbed_image=perturb_image(image,gradient,eps)
+        # Append the perturbed image to the list of adversarials
+        adversarials.append(perturbed_image.detach().clone())
+    return adversarials
 
 def plot_adversarials(model, image, adv_images, eps_values):
     """
@@ -96,8 +129,25 @@ def plot_adversarials(model, image, adv_images, eps_values):
         - The model works with normalized images. Before visualizing the images, you have to invert the normalization
         using `unnormalize()`
     """
+    fig, axes = plt.subplots(len(adv_images) + 1, 1, figsize=(10, 2 * (len(adv_images) + 1)))
 
-    fig, axes = plt.subplots(len(adv_images) + 1, 1)
+    # Plot original image
+    original_label = model.predict(image)
+    unnormalized_image = unnormalize_image(image)
+    axes[0].imshow(unnormalized_image)
+    axes[0].set_title(f'Original\nLabel: {original_label.item()}')
+
+    # Plot adversarial images
+    for i, adv_image in enumerate(adv_images):
+        adv_label = model.predict(adv_image)
+        unnormalized_adv_image = unnormalize_image()
+        axes[i + 1].imshow(unnormalized_adv_image)
+        axes[i + 1].set_title(f'Eps: {eps_values[i]}\nAdv Label: {adv_label.item()}')
+
+    for ax in axes:
+        ax.axis('off')
+
+    plt.show()
 
 
 if __name__ == "__main__":
