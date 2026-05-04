@@ -1,0 +1,14 @@
+{
+  "tests": [
+    {
+      "name": "test_notebook",
+      "setup": "sudo -H pip3 install -r requirements.txt",
+      "run": "pytest",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 10,
+      "points": null
+    }
+  ]
+}
