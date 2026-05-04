@@ -38,3 +38,9 @@ If you are a current student elsewhere, do not copy solutionsâ€”use the courseâ€
 ## License
 
 Code in this repository is released under the [MIT License](LICENSE), to the extent the author controls the rights in their own solutions. Third-party datasets and assets keep their original terms (see each assignment `README.md`).
+
+## Publishing to GitHub
+
+History was rewritten to strip student identity files and course PDFs from **all** commits. When you first publish (or replace an existing default branch), update the remote with a force push after you are sure no collaborators depend on the old history, for example:
+
+`git push --force-with-lease origin main`
