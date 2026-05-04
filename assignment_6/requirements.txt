@@ -1,0 +1,10 @@
+numpy
+scikit-learn
+matplotlib
+pytest
+tqdm
+torch
+pytorch_lightning
+ConfigSpace
+anchor-exp
+pandas
