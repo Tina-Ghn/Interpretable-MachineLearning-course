@@ -1,8 +1,0 @@
-pandas
-numpy
-scikit-learn
-jupyter
-matplotlib
-pytest
-testbook
-ConfigSpace

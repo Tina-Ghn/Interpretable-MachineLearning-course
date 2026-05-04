@@ -1,4 +1,3 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/8TNYm5yL)
 # Interpretable Machine Learning: Exercise 1
 
 # Instructions
@@ -13,8 +12,7 @@ conda activate iML
 3. Install requirements with `pip install -r requirements.txt`.
 4. Open jupyter notebook with `jupyter notebook` and finish the exercises in the file `exercise.ipynb`.
 5. Don't add or remove cells. 
-6. Test all of your solutions with `pytest test_notebook.py`. 
-6. Push your solution to your repository.
+6. Test all of your solutions with `pytest test_notebook.py`.
 
 Code is tested on Linux and Mac only. Testing is not guaranteed to work on Windows or VMs.
 

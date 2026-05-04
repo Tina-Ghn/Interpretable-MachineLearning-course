@@ -132,3 +132,7 @@ dmypy.json
 **/.idea/
 
 **/lightning_logs
+
+# Never commit student identity files (portfolio / privacy)
+user_info.txt
+**/user_info.txt

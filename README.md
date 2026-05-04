@@ -1,23 +1,40 @@
+# Interpretable Machine Learning — portfolio coursework
 
-# Interpretable Machine Learning: Exercise 1
+This repository collects coursework for an **Interpretable Machine Learning** course: implementations, tests, and small experiments around model explanations (e.g. partial dependence–style views, Shapley-related ideas, LIME-style tooling, adversarial and counterfactual examples, and neural attribution).
 
-# Instructions
+Each `assignment_*` directory is **self-contained** (own `requirements.txt` and `pytest` suite). Use Python **3.9** and a virtual environment per assignment unless you prefer one shared env.
 
-1. Install the open-source-distribution [anaconda](https://www.anaconda.com/products/individual).
-2. Create a new environment with python 3.9 and activate it. If you already created an environment for a previous exercise, feel free to reuse it.
+## Quick start
+
+```bash
+cd assignment_1   # or any assignment_N folder
+python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+pytest -q
 ```
-conda create -n iML python=3.9
-conda activate iML
-```
 
-3. Install requirements with `pip install -r requirements.txt`.
-4. Open jupyter notebook with `jupyter notebook` and finish the exercises in the file `exercise.ipynb`.
-5. Don't add or remove cells. 
-6. Test all of your solutions with `pytest test_notebook.py`. 
-6. Push your solution to your repository.
+## Layout
 
-Code is tested on Linux and Mac only. Testing is not guaranteed to work on Windows or VMs.
+| Folder | Focus (short) |
+|--------|----------------|
+| `assignment_1` | Notebook-based intro on data and baselines (`exercise.ipynb`, `test_notebook.py`) |
+| `assignment_2` | Interpretable structure: trees, linear models, plotting |
+| `assignment_3` | ICE / ALE-style curves |
+| `assignment_5` | Model-agnostic explanations, cooperative game / Shapley-flavored tasks |
+| `assignment_6` | Custom LIME-style explanations |
+| `assignment_7` | Adversarial examples and counterfactuals (image + tabular) |
+| `assignment_8` | CNN explanations (e.g. Captum-oriented tasks) |
 
-# Copyright
+There is no `assignment_4` in this tree; numbering matches the original course set.
 
-Dataset from [kaggle](https://www.kaggle.com/jmcaro/wheat-seedsuci).
+## What was changed for a public portfolio
+
+- **Official `exercise.pdf` handouts** are not included here, to respect instructor/course copyright. Your own write-ups or links to public materials belong in your CV or a blog post, not necessarily in this repo.
+- **GitHub Classroom** automation (badges, Classroom workflows, autograding JSON) was removed so the project reads as a normal open repository and CI runs plain `pytest`.
+- **Student identity files** (`user_info.txt`) must never be committed; they are listed in `.gitignore`.
+
+If you are a current student elsewhere, do not copy solutions—use the course’s own rules.
+
+## License
+
+Code in this repository is released under the [MIT License](LICENSE), to the extent the author controls the rights in their own solutions. Third-party datasets and assets keep their original terms (see each assignment `README.md`).

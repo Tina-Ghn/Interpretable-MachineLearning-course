@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        assignment:
+          - assignment_1
+          - assignment_2
+          - assignment_3
+          - assignment_5
+          - assignment_6
+          - assignment_7
+          - assignment_8
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+          cache: pip
+          cache-dependency-path: ${{ matrix.assignment }}/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r "${{ matrix.assignment }}/requirements.txt"
+
+      - name: Run tests
+        working-directory: ${{ matrix.assignment }}
+        run: pytest -q

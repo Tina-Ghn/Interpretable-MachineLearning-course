@@ -1,4 +1,3 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/UwPQa2I2)
 # Interpretable Machine Learning: Exercise 6
 
 ## Instructions
@@ -13,7 +12,6 @@ conda activate iML
 3. Install requirements with `pip install -r requirements.txt`.
 4. Add your code in all `tasks/*.py` files according to the exercise sheet. You can run them with `python tasks/*.py`. All functions are called automatically.
 5. Test all tasks with `pytest` or specific files with `pytest tests/test_*.py`.
-6. Push your solution to your repository.
 
 Code is tested on Linux and Mac only. Testing is not guaranteed to work on Windows or VMs.
 

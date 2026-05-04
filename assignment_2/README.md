@@ -1,4 +1,3 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/OwNq2r7W)
 # Interpretable Machine Learning: Exercise 2
 
 ## Instructions
@@ -17,7 +16,7 @@ conda activate iML
    - `python tasks/linear_models.py`
    - `python tasks/plotting.py`
 5. Test your code or specific files with `pytest tests/*.py`.
-6. Push your solution to your repository (remember to include the .png files for the plots).
+6. Include generated `.png` plot outputs when sharing your work.
 
 Code is tested on Linux and Mac only. Testing is not guaranteed to work on Windows or VMs.
 
