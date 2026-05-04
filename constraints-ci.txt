@@ -1,0 +1,5 @@
+# Used by .github/workflows/ci.yml so OpenMP/PyTorch wheels match the course
+# autograder expectations (same numerics as tests). Install with:
+#   pip install -r assignment_N/requirements.txt -c constraints-ci.txt --extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.1.2
+torchvision==0.16.2
