@@ -1,6 +1,6 @@
-# Interpretable Machine Learning — portfolio coursework
+# Interpretable Machine Learning
 
-This repository collects coursework for an **Interpretable Machine Learning** course: implementations, tests, and small experiments around model explanations (e.g. partial dependence–style views, Shapley-related ideas, LIME-style tooling, adversarial and counterfactual examples, and neural attribution).
+This repository collects my coursework from the **Interpretable Machine Learning** course at [**Leibniz University Hannover**](https://www.uni-hannover.de/en/) (Leibniz Universität Hannover, LUH): implementations, tests, and small experiments around model explanations (e.g. partial dependence–style views, Shapley-related ideas, LIME-style tooling, adversarial and counterfactual examples, and neural attribution). It is a personal portfolio and not an official university or course website.
 
 Each `assignment_*` directory is **self-contained** (own `requirements.txt` and `pytest` suite). Use Python **3.9** and a virtual environment per assignment unless you prefer one shared env.
 
@@ -27,20 +27,7 @@ pytest -q
 
 There is no `assignment_4` in this tree; numbering matches the original course set.
 
-## What was changed for a public portfolio
-
-- **Official `exercise.pdf` handouts** are not included here, to respect instructor/course copyright. Your own write-ups or links to public materials belong in your CV or a blog post, not necessarily in this repo.
-- **GitHub Classroom** automation (badges, Classroom workflows, autograding JSON) was removed so the project reads as a normal open repository and CI runs plain `pytest`.
-- **Student identity files** (`user_info.txt`) must never be committed; they are listed in `.gitignore`.
-
-If you are a current student elsewhere, do not copy solutions—use the course’s own rules.
-
 ## License
 
 Code in this repository is released under the [MIT License](LICENSE), to the extent the author controls the rights in their own solutions. Third-party datasets and assets keep their original terms (see each assignment `README.md`).
 
-## Publishing to GitHub
-
-History was rewritten to strip student identity files and course PDFs from **all** commits. When you first publish (or replace an existing default branch), update the remote with a force push after you are sure no collaborators depend on the old history, for example:
-
-`git push --force-with-lease origin main`
